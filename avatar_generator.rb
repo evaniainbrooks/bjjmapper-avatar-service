@@ -19,7 +19,7 @@ class AvatarGenerator
       self.fill = color
     }
 
-    circle_draw.circle(IMAGE_WIDTH / 2, IMAGE_HEIGHT / 2, 20, 20)
+    circle_draw.circle(IMAGE_WIDTH / 2, IMAGE_HEIGHT / 2, IMAGE_WIDTH / 2, IMAGE_HEIGHT-1)
     circle_draw.draw(img)
     font_draw = Draw.new {
       self.font_family ='helvetica'
