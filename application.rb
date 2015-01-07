@@ -11,12 +11,16 @@ before do
   content_type "image/png"
 end
 
-get '/avatar' do
-  name = params[:name] || '?'
+get '/:width_height/:name/image.png' do
+  name = (params[:name] || '?')
+  width, height = (params[:width_height] || '100x100').split('x')
   options = {
     name: name,
+    width: width.to_i,
+    height: height.to_i,
     format: 'png'
   }
+
   AvatarGenerator.avatar_for(options)
 end
 

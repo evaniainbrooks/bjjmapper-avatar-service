@@ -4,14 +4,14 @@ require './color_generator'
 class AvatarGenerator
   include Magick
 
-  POINT_SIZE = 42
-  IMAGE_WIDTH = 100
-  IMAGE_HEIGHT = 100
-
   def self.avatar_for(options)
-    img_text = initials_for(options[:name])
+    image_text = initials_for(options[:name])
+    image_width, half_width = options[:width], options[:width]/2
+    image_height, half_height = options[:height], options[:height]/2
     color = ColorGenerator.color_for(options[:name])
-    img = Image.new(IMAGE_WIDTH, IMAGE_HEIGHT) {
+    point_size = 22 + (image_width)/5
+
+    img = Image.new(image_width, image_height) {
       self.background_color = 'transparent'
     }
 
@@ -19,15 +19,16 @@ class AvatarGenerator
       self.fill = color
     }
 
-    circle_draw.circle(IMAGE_WIDTH / 2, IMAGE_HEIGHT / 2, IMAGE_WIDTH / 2, IMAGE_HEIGHT-1)
+    circle_draw.circle(half_width, half_height, half_width, image_height-1)
     circle_draw.draw(img)
+    
     font_draw = Draw.new {
       self.font_family ='helvetica'
-      self.pointsize = POINT_SIZE
+      self.pointsize = point_size
       self.gravity = CenterGravity
     }
 
-    font_draw.annotate(img, 0, 0, 0, 5, img_text) {
+    font_draw.annotate(img, 0, 0, 0, 5, image_text) {
       self.fill = 'black'
     }
 

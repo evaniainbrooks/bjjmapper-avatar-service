@@ -12,7 +12,7 @@ class AvatarServiceTest < Test::Unit::TestCase
   end
 
   def test_it_returns_an_image
-    get "/avatar?name=Marcelo%20Garcia"
+    get "/100x100/Marcelo%20Garcia/image.png"
     assert last_response.ok?
     assert last_response.headers['Content-Length'].to_i > 100
     assert_equal last_response.headers['Content-Type'], "image/png"
