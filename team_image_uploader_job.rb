@@ -1,4 +1,5 @@
 require 'mongo'
+require 'uri'
 require './database_config'
 require './team_image_uploader'
 
@@ -24,9 +25,16 @@ module TeamImageUploaderJob
 
   def self.update_model(id, uploader)
     update_params = {
-      :image => uploader.url(:small),
-      :image_large => uploader.url
+      :image => cachebust_url( uploader.url(:small) ),
+      :image_large => cachebust_url( uploader.url )
     }
     @connection['teams'].update({ :_id => id }, { "$set" => update_params })
+  end
+
+  def self.cachebust_url(url)
+    uri = URI.parse(url)
+    query_args = URI.decode_www_form(uri.query || '') << ["ts", Time.now.to_i]
+    uri.query = URI.encode_www_form(query_args)
+    uri.to_s
   end
 end
