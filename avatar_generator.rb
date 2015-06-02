@@ -15,13 +15,20 @@ class AvatarGenerator
       self.background_color = 'transparent'
     }
 
+    outer_circle_draw = Draw.new {
+      self.fill = "#000000"
+    }
+
     circle_draw = Draw.new {
       self.fill = color
     }
 
-    circle_draw.circle(half_width, half_height, half_width, image_height-1)
+    outer_circle_draw.circle(half_width, half_height, half_width, image_height - 1)
+    outer_circle_draw.draw(img)
+
+    circle_draw.circle(half_width, half_height, half_width - 2, image_height - 3)
     circle_draw.draw(img)
-    
+
     font_draw = Draw.new {
       self.font_family ='helvetica'
       self.pointsize = point_size
