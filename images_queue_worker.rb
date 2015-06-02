@@ -2,6 +2,7 @@ require 'resque'
 require 'mongo'
 require './database_config'
 require './team_image_uploader_job'
+require './user_image_uploader_job'
 
 include Mongo
 

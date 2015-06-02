@@ -8,6 +8,7 @@ require 'resque'
 require './database_config'
 require './avatar_generator'
 require './team_image_uploader'
+require './user_image_uploader'
 
 include Mongo
 
@@ -38,6 +39,22 @@ helpers do
     id = object_id(id) if String === id
     settings.mongo_db[collection].find_one(:_id => id)
   end
+end
+
+post '/upload/users/:user_id/async' do
+  content_type :json
+
+  unless params[:file] && params[:file][:tempfile]
+    STDERR.puts "Missing file argument, returning 400"
+    halt 400
+  end
+
+  model = document_by_id(params[:user_id], 'users')
+  halt 404 if model.nil?
+
+  UserImageUploader.store_async(model, params[:file])
+
+  status 202
 end
 
 post '/upload/teams/:team_id/async' do

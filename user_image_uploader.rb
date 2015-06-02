@@ -6,24 +6,24 @@ require 'securerandom'
 require 'resque'
 
 require './carrierwave_config'
-require './team_image_uploader_job'
+require './user_image_uploader_job'
 
-class TeamImageUploader < CarrierWave::Uploader::Base
+class UserImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::RMagick
   include CarrierWave::MimeTypes
 
-  LARGE_SIZE = 300
-  SMALL_SIZE = 100
+  LARGE_SIZE = 450
+  SMALL_SIZE = 200
   TINY_SIZE  = 50
 
   LARGE_FILENAME_SUFFIX = "-#{LARGE_SIZE}.png"
   SMALL_FILENAME_SUFFIX = "-#{SMALL_SIZE}.png"
   TINY_FILENAME_SUFFIX = "-#{TINY_SIZE}.png"
 
-  process :resize_to_fit => [LARGE_SIZE, LARGE_SIZE]
+  process :resize_to_limit => [LARGE_SIZE, nil]
 
   version :small do
-    process :resize_to_fit => [SMALL_SIZE, SMALL_SIZE]
+    process :resize_to_limit => [SMALL_SIZE, nil]
     process :set_content_type_png
     convert :png
 
@@ -39,7 +39,7 @@ class TeamImageUploader < CarrierWave::Uploader::Base
   end
 
   version :tiny do
-    process :resize_to_fit => [TINY_SIZE, TINY_SIZE]
+    process :resize_to_limit => [TINY_SIZE, nil]
     process :set_content_type_png
     convert :png
 
@@ -59,7 +59,7 @@ class TeamImageUploader < CarrierWave::Uploader::Base
   convert :png
 
   def full_filename(for_file=self.file)
-    "#{self.model['name'].parameterize}#{LARGE_FILENAME_SUFFIX}"
+    "#{self.model['_id'].to_s}#{LARGE_FILENAME_SUFFIX}"
   end
 
   def full_original_filename
@@ -72,7 +72,7 @@ class TeamImageUploader < CarrierWave::Uploader::Base
 
   def self.store_async(model, file)
     path = self.copy_upload_to_file(file[:tempfile])
-    Resque.enqueue(TeamImageUploaderJob, model, path)
+    Resque.enqueue(UserImageUploaderJob, model, path)
   end
 
   def store_dir
