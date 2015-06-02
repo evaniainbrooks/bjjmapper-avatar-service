@@ -25,6 +25,7 @@ module TeamImageUploaderJob
 
   def self.update_model(id, uploader)
     update_params = {
+      :image_tiny => cachebust_url( uploader.url(:tiny) ),
       :image => cachebust_url( uploader.url(:small) ),
       :image_large => cachebust_url( uploader.url )
     }

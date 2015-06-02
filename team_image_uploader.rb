@@ -22,9 +22,11 @@ class TeamImageUploader < CarrierWave::Uploader::Base
 
   LARGE_SIZE = 300
   SMALL_SIZE = 100
+  TINY_SIZE  = 50
 
   LARGE_FILENAME_SUFFIX = "-#{LARGE_SIZE}.png"
   SMALL_FILENAME_SUFFIX = "-#{SMALL_SIZE}.png"
+  TINY_FILENAME_SUFFIX = "-#{TINY_SIZE}.png"
 
   process :resize_to_fill => [LARGE_SIZE, LARGE_SIZE]
 
@@ -37,6 +39,22 @@ class TeamImageUploader < CarrierWave::Uploader::Base
       parent_name = super(for_file)
       base_name = parent_name.chomp(LARGE_FILENAME_SUFFIX)
       "#{base_name}#{SMALL_FILENAME_SUFFIX}"
+    end
+
+    def full_original_filename
+      full_filename(self.file)
+    end
+  end
+
+  version :tiny do
+    process :resize_to_fill => [TINY_SIZE, TINY_SIZE]
+    process :set_content_type_png
+    convert :png
+
+    def full_filename(for_file=self.file)
+      parent_name = super(for_file)
+      base_name = parent_name.chomp(LARGE_FILENAME_SUFFIX)
+      "#{base_name}#{TINY_FILENAME_SUFFIX}"
     end
 
     def full_original_filename
