@@ -76,7 +76,7 @@ class UserImageUploader < CarrierWave::Uploader::Base
   end
 
   def store_dir
-    "uploads/#{environment}/teams"
+    "uploads/#{environment}/users"
   end
 
   def environment
