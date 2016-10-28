@@ -1,5 +1,5 @@
 require 'RMagick'
-require './color_generator'
+require_relative 'color_generator'
 
 class AvatarGenerator
   include Magick

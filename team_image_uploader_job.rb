@@ -1,13 +1,13 @@
 require 'mongo'
 require 'uri'
-require './database_config'
-require './team_image_uploader'
+require_relative 'database_config'
+require_relative 'team_image_uploader'
 
 module TeamImageUploaderJob
   include Mongo
 
   @queue = "images"
-  @connection = MongoClient.new(DATABASE_HOST, DATABASE_PORT).db(DATABASE_DB)
+  @connection = MongoClient.new(AvatarService::DATABASE_HOST, AvatarService::DATABASE_PORT).db(AvatarService::DATABASE_DB)
 
   def self.perform(model, path)
     begin

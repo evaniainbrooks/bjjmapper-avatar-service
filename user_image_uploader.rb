@@ -5,8 +5,8 @@ require 'rmagick'
 require 'securerandom'
 require 'resque'
 
-require './carrierwave_config'
-require './user_image_uploader_job'
+require_relative 'carrierwave_config'
+require_relative 'user_image_uploader_job'
 
 class UserImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::RMagick
