@@ -1,0 +1,14 @@
+---
+chdir: "/var/www/rollfindr_avatarsvc"
+environment: production
+address: 127.0.0.1
+port: 9003
+timeout: 30
+log: "/var/www/rollfindr/current/shared/log/avatarsvc.log"
+pid: "/var/www/rollfindr/current/shared/tmp/pids/avatarsvc.pid"
+max_conns: 1024
+max_persistent_conns: 100
+require: []
+wait: 30
+threadpool_size: 20
+daemonize: true

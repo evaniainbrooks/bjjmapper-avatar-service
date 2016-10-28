@@ -15,6 +15,7 @@ gem 'bson_ext'
 gem 'carrierwave'
 gem 'fog'
 gem 'dotenv'
+gem 'thin'
 
 group :test, :development do
   gem 'capistrano', '~> 3.2.1'
