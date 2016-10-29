@@ -1,3 +1,6 @@
+require '.env'
+Dotenv.load
+
 require 'resque'
 require 'mongo'
 require_relative 'database_config'
