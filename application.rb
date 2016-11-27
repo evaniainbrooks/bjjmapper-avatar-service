@@ -13,6 +13,8 @@ require_relative 'user_image_uploader'
 include Mongo
 
 module AvatarService
+  WORKERS = ['images_queue_worker']
+
   class Application < Sinatra::Application
     configure do
       set :app_file, __FILE__

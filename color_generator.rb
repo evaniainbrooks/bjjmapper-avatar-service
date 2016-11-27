@@ -7,7 +7,7 @@ class ColorGenerator
 
   def self.color_for(name)
     digest = Zlib.crc32(name)
-    return "##{r(digest)}#{g(digest)}#{b(digest)}"
+    return [r(digest), g(digest), b(digest)]
   end
 
   private
