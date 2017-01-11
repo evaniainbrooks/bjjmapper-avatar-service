@@ -1,4 +1,4 @@
-require '.env'
+require 'dotenv'
 Dotenv.load
 
 require 'resque'
@@ -6,6 +6,7 @@ require 'mongo'
 require_relative 'database_config'
 require_relative 'team_image_uploader_job'
 require_relative 'user_image_uploader_job'
+require_relative 'location_image_uploader_job'
 
 include Mongo
 

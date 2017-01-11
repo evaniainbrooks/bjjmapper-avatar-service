@@ -9,6 +9,7 @@ require_relative 'database_config'
 require_relative 'avatar_generator'
 require_relative 'team_image_uploader'
 require_relative 'user_image_uploader'
+require_relative 'location_image_uploader'
 
 include Mongo
 
@@ -73,6 +74,22 @@ module AvatarService
       halt 404 if model.nil?
 
       TeamImageUploader.store_async(model, params[:file])
+
+      status 202
+    end
+    
+    post '/upload/locations/:location_id/async' do
+      content_type :json
+
+      unless params[:file] && params[:file][:tempfile]
+        STDERR.puts "Missing file argument, returning 400"
+        halt 400
+      end
+
+      model = document_by_id(params[:location_id], 'locations')
+      halt 404 if model.nil?
+
+      LocationImageUploader.store_async(model, params[:file])
 
       status 202
     end
