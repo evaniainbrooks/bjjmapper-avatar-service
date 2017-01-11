@@ -41,7 +41,6 @@ class AvatarGenerator
     }
 
     img.format = options[:format]
-    img.quality = 10
     img.to_blob
   end
 
