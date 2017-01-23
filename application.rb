@@ -22,15 +22,13 @@ module AvatarService
       set :bind, '0.0.0.0'
       set :port, ENV['PORT']
 
-      set :resque_database_name, DATABASE_QUEUE_DB
       set :database_name, DATABASE_DB
 
       connection = MongoClient.new(DATABASE_HOST, DATABASE_PORT)
       set :mongo_connection, connection
       set :mongo_db, connection.db(settings.database_name)
-      set :queue_db, connection.db(settings.resque_database_name)
 
-      Resque.mongo = settings.queue_db
+      Resque.redis = Redis.new(host: DATABASE_HOST, password: ENV['REDIS_PASS'])
     end
 
     helpers do

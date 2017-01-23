@@ -7,7 +7,7 @@ gem 'andand'
 gem 'foreman'
 gem 'unicorn'
 gem 'rmagick'
-gem 'mongo-resque', require: 'resque'
+gem 'resque'
 
 gem 'mongo'
 gem 'bson_ext'
