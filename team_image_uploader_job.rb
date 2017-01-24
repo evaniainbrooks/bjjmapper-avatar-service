@@ -9,14 +9,14 @@ module TeamImageUploaderJob
   @queue = "images"
   @connection = MongoClient.new(AvatarService::DATABASE_HOST, AvatarService::DATABASE_PORT).db(AvatarService::DATABASE_DB)
 
-  def self.perform(model, path)
+  def self.perform(id, path)
     begin
-      uploader = TeamImageUploader.new(model)
+      uploader = TeamImageUploader.new(id)
       file = File.open(path, "rb")
 
       uploader.store!(file)
 
-      self.update_model(model['_id'], uploader)
+      self.update_model(id, uploader)
 
     ensure
       File.delete(path)
@@ -29,7 +29,7 @@ module TeamImageUploaderJob
       :image => cachebust_url( uploader.url(:small) ),
       :image_large => cachebust_url( uploader.url )
     }
-    @connection['teams'].update({ :_id => id }, { "$set" => update_params })
+    @connection['teams'].update({ :_id => BSON::ObjectId.from_string(id) }, { "$set" => update_params })
   end
 
   def self.cachebust_url(url)

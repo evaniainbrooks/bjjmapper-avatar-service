@@ -59,7 +59,7 @@ class UserImageUploader < CarrierWave::Uploader::Base
   convert :png
 
   def full_filename(for_file=self.file)
-    "#{self.model['_id'].to_s}#{LARGE_FILENAME_SUFFIX}"
+    "#{self.model.parameterize}#{LARGE_FILENAME_SUFFIX}"
   end
 
   def full_original_filename
@@ -70,9 +70,9 @@ class UserImageUploader < CarrierWave::Uploader::Base
     self.file.instance_variable_set(:@content_type, "image/png")
   end
 
-  def self.store_async(model, file)
+  def self.store_async(id, file)
     path = self.copy_upload_to_file(file[:tempfile])
-    Resque.enqueue(UserImageUploaderJob, model, path)
+    Resque.enqueue(UserImageUploaderJob, id, path)
   end
 
   def store_dir

@@ -3,6 +3,7 @@ Dotenv.load
 
 require 'resque'
 require_relative 'database_config'
+require_relative 'image_downloader_job'
 require_relative 'team_image_uploader_job'
 require_relative 'user_image_uploader_job'
 require_relative 'location_image_uploader_job'
@@ -10,7 +11,7 @@ require_relative 'location_image_uploader_job'
 WAIT_INTERVAL = 10.0
 RESQUE_IMAGES_QUEUE = "images"
 
-Resque.redis = Redis.new(host: DATABASE_HOST, password: ENV['REDIS_PASS'])
+Resque.redis = Redis.new(host: AvatarService::DATABASE_HOST, password: ENV['REDIS_PASS'])
 
 STDOUT.puts "Starting images queue worker on #{Resque.redis.inspect}"
 

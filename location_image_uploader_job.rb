@@ -9,14 +9,14 @@ module LocationImageUploaderJob
   @queue = "images"
   @connection = MongoClient.new(AvatarService::DATABASE_HOST, AvatarService::DATABASE_PORT).db(AvatarService::DATABASE_DB)
 
-  def self.perform(model, path)
+  def self.perform(id, path)
     begin
-      uploader = LocationImageUploader.new(model)
+      uploader = LocationImageUploader.new(id)
       file = File.open(path, "rb")
 
       uploader.store!(file)
 
-      self.update_model(model['_id'], uploader)
+      self.update_model(id, uploader)
     ensure
       File.delete(path)
     end
@@ -28,7 +28,9 @@ module LocationImageUploaderJob
       :image => cachebust_url( uploader.url(:small) ),
       :image_large => cachebust_url( uploader.url )
     }
-    @connection['locations'].update({ :_id => id }, { "$set" => update_params })
+    
+    response = @connection['locations'].update({ :_id => BSON::ObjectId.from_string(id) }, { "$set" => update_params })
+    STDERR.puts response.inspect
   end
 
   def self.cachebust_url(url)

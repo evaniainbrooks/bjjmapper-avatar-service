@@ -10,8 +10,7 @@ require_relative 'avatar_generator'
 require_relative 'team_image_uploader'
 require_relative 'user_image_uploader'
 require_relative 'location_image_uploader'
-
-include Mongo
+require_relative 'image_downloader_job'
 
 module AvatarService
   WORKERS = ['images_queue_worker']
@@ -22,26 +21,7 @@ module AvatarService
       set :bind, '0.0.0.0'
       set :port, ENV['PORT']
 
-      set :database_name, DATABASE_DB
-
-      connection = MongoClient.new(DATABASE_HOST, DATABASE_PORT)
-      set :mongo_connection, connection
-      set :mongo_db, connection.db(settings.database_name)
-
       Resque.redis = Redis.new(host: DATABASE_HOST, password: ENV['REDIS_PASS'])
-    end
-
-    helpers do
-      # a helper method to turn a string ID
-      # representation into a BSON::ObjectId
-      def object_id val
-        BSON::ObjectId.from_string(val)
-      end
-
-      def document_by_id id, collection
-        id = object_id(id) if String === id
-        settings.mongo_db[collection].find_one(:_id => id)
-      end
     end
 
     post '/upload/users/:user_id/async' do
@@ -52,10 +32,7 @@ module AvatarService
         halt 400
       end
 
-      model = document_by_id(params[:user_id], 'users')
-      halt 404 if model.nil?
-
-      UserImageUploader.store_async(model, params[:file])
+      UserImageUploader.store_async(params[:user_id], params[:file])
 
       status 202
     end
@@ -68,10 +45,7 @@ module AvatarService
         halt 400
       end
 
-      model = document_by_id(params[:team_id], 'teams')
-      halt 404 if model.nil?
-
-      TeamImageUploader.store_async(model, params[:file])
+      TeamImageUploader.store_async(params[:team_id], params[:file])
 
       status 202
     end
@@ -84,10 +58,25 @@ module AvatarService
         halt 400
       end
 
-      model = document_by_id(params[:location_id], 'locations')
-      halt 404 if model.nil?
+      LocationImageUploader.store_async(params[:location_id], params[:file])
 
-      LocationImageUploader.store_async(model, params[:file])
+      status 202
+    end
+
+    post '/upload/locations/:location_id/url' do
+      content_type :json
+
+      puts "Parsing post body"
+      request.body.rewind
+      post_body = JSON.parse(request.body.read)
+
+      unless post_body['url']
+        STDERR.puts "Missing url argument, returning 400"
+        halt 400
+      end
+
+      puts "Enqueuing download job for #{post_body['url']}"
+      Resque.enqueue(ImageDownloaderJob, params[:location_id], post_body['url'], LocationImageUploaderJob.to_s)
 
       status 202
     end
