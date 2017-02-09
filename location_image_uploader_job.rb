@@ -7,7 +7,7 @@ module LocationImageUploaderJob
   include Mongo
 
   @queue = "images"
-  @connection = MongoClient.new(AvatarService::DATABASE_HOST, AvatarService::DATABASE_PORT).db(AvatarService::DATABASE_DB)
+  @connection = Mongo::Client.new("mongodb://#{AvatarService::DATABASE_HOST}:#{AvatarService::DATABASE_PORT}/#{AvatarService::DATABASE_DB}")
 
   def self.perform(id, path)
     begin
@@ -29,7 +29,7 @@ module LocationImageUploaderJob
       :image_large => cachebust_url( uploader.url )
     }
     
-    response = @connection['locations'].update({ :_id => BSON::ObjectId.from_string(id) }, { "$set" => update_params })
+    response = @connection['locations'].update_one({ :_id => BSON::ObjectId.from_string(id) }, { "$set" => update_params })
     STDERR.puts response.inspect
   end
 

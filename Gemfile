@@ -8,10 +8,7 @@ gem 'foreman'
 gem 'unicorn'
 gem 'rmagick'
 gem 'resque'
-
-gem 'mongo'
-gem 'bson_ext'
-
+gem 'mongo', '~> 2.4'
 gem 'carrierwave'
 gem 'fog'
 gem 'dotenv'
