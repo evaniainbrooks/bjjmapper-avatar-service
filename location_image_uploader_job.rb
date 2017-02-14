@@ -7,7 +7,7 @@ module LocationImageUploaderJob
   include Mongo
 
   @queue = "images"
-  @connection = Mongo::Client.new("mongodb://#{AvatarService::DATABASE_HOST}:#{AvatarService::DATABASE_PORT}/#{AvatarService::DATABASE_DB}")
+  @connection = Mongo::Client.new(AvatarService::DATABASE_URI)
 
   def self.perform(id, path)
     begin
@@ -34,9 +34,9 @@ module LocationImageUploaderJob
   end
 
   def self.cachebust_url(url)
-    uri = URI.parse(url)
-    query_args = URI.decode_www_form(uri.query || '') << ["ts", Time.now.to_i]
-    uri.query = URI.encode_www_form(query_args)
+    uri = ::URI.parse(url)
+    query_args = ::URI.decode_www_form(uri.query || '') << ["ts", Time.now.to_i]
+    uri.query = ::URI.encode_www_form(query_args)
     uri.to_s
   end
 end
