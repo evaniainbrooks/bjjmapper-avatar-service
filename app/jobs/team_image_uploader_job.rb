@@ -1,9 +1,9 @@
 require 'mongo'
 require 'uri'
-require_relative 'database_config'
-require_relative 'user_image_uploader'
+require_relative '../../database_config'
+require_relative '../team_image_uploader'
 
-module UserImageUploaderJob
+module TeamImageUploaderJob
   include Mongo
 
   @queue = "images"
@@ -11,12 +11,13 @@ module UserImageUploaderJob
 
   def self.perform(id, path)
     begin
-      uploader = UserImageUploader.new(id)
+      uploader = TeamImageUploader.new(id)
       file = File.open(path, "rb")
 
       uploader.store!(file)
 
       self.update_model(id, uploader)
+
     ensure
       File.delete(path)
     end
@@ -28,7 +29,7 @@ module UserImageUploaderJob
       :image => cachebust_url( uploader.url(:small) ),
       :image_large => cachebust_url( uploader.url )
     }
-    @connection['users'].update_one({ :_id => BSON::ObjectId.from_string(id) }, { "$set" => update_params })
+    @connection['teams'].update_one({ :_id => BSON::ObjectId.from_string(id) }, { "$set" => update_params })
   end
 
   def self.cachebust_url(url)

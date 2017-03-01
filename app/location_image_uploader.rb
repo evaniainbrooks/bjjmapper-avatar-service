@@ -6,7 +6,7 @@ require 'securerandom'
 require 'resque'
 
 require_relative 'carrierwave_config'
-require_relative 'location_image_uploader_job'
+require_relative './jobs/location_image_uploader_job'
 
 class LocationImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::RMagick

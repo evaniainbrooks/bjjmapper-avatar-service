@@ -6,11 +6,11 @@ require 'json/ext'
 require 'resque'
 
 require_relative 'database_config'
-require_relative 'avatar_generator'
-require_relative 'team_image_uploader'
-require_relative 'user_image_uploader'
-require_relative 'location_image_uploader'
-require_relative 'image_downloader_job'
+require_relative 'app/avatar_generator'
+require_relative 'app/team_image_uploader'
+require_relative 'app/user_image_uploader'
+require_relative 'app/location_image_uploader'
+require_relative 'app/jobs/image_downloader_job'
 
 module AvatarService
   WORKERS = ['images_queue_worker']

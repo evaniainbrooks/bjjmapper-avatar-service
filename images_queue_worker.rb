@@ -3,10 +3,10 @@ Dotenv.load
 
 require 'resque'
 require_relative 'database_config'
-require_relative 'image_downloader_job'
-require_relative 'team_image_uploader_job'
-require_relative 'user_image_uploader_job'
-require_relative 'location_image_uploader_job'
+require_relative 'app/jobs/image_downloader_job'
+require_relative 'app/jobs/team_image_uploader_job'
+require_relative 'app/jobs/user_image_uploader_job'
+require_relative 'app/jobs/location_image_uploader_job'
 
 WAIT_INTERVAL = 10.0
 RESQUE_IMAGES_QUEUE = "images"

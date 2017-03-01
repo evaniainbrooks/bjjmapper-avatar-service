@@ -1,7 +1,7 @@
 require 'mongo'
 require 'uri'
-require_relative 'database_config'
-require_relative 'location_image_uploader'
+require_relative '../../database_config'
+require_relative '../location_image_uploader'
 
 module LocationImageUploaderJob
   include Mongo
