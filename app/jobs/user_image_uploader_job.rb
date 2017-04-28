@@ -1,13 +1,13 @@
-require 'mongo'
 require 'uri'
+require 'rubygems'
+require 'bundler/setup'
+require 'bjjmapper_api_client'
 require_relative '../../database_config'
 require_relative '../user_image_uploader'
 
 module UserImageUploaderJob
-  include Mongo
-
   @queue = "images"
-  @connection = Mongo::Client.new(AvatarService::DATABASE_URI)
+  @bjjmapper = BJJMapper::ApiClient.new({host: AvatarService::BJJMAPPER_HOST, port: AvatarService::BJJMAPPER_PORT, api_key: ENV['BJJMAPPER_API_KEY']})
 
   def self.perform(id, path)
     begin
@@ -28,7 +28,8 @@ module UserImageUploaderJob
       :image => cachebust_url( uploader.url(:small) ),
       :image_large => cachebust_url( uploader.url )
     }
-    @connection['users'].update_one({ :_id => BSON::ObjectId.from_string(id) }, { "$set" => update_params })
+
+    @bjjmapper.update_user(id, update_params)
   end
 
   def self.cachebust_url(url)

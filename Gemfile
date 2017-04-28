@@ -6,11 +6,11 @@ gem 'foreman'
 gem 'unicorn'
 gem 'rmagick'
 gem 'resque'
-gem 'mongo', '~> 2.4'
 gem 'carrierwave'
 gem 'fog'
 gem 'dotenv'
 gem 'thin'
+gem 'bjjmapper_api_client', '~> 0.0.2', :git => 'git@bitbucket.org:rollfindr/bjjmapper_api_client.git'
 
 group :test, :development do
   gem 'capistrano', '~> 3.2.1'
@@ -19,4 +19,3 @@ group :test, :development do
   gem 'rspec'
   gem 'rack-test'
 end
-

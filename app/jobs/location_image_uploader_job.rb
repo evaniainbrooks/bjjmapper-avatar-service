@@ -1,13 +1,10 @@
-require 'mongo'
 require 'uri'
 require_relative '../../database_config'
 require_relative '../location_image_uploader'
 
 module LocationImageUploaderJob
-  include Mongo
-
   @queue = "images"
-  @connection = Mongo::Client.new(AvatarService::DATABASE_URI)
+  @bjjmapper = BJJMapper::ApiClient.new({host: AvatarService::BJJMAPPER_HOST, port: AvatarService::BJJMAPPER_PORT, api_key: ENV['BJJMAPPER_API_KEY']})
 
   def self.perform(id, path)
     begin
@@ -28,8 +25,8 @@ module LocationImageUploaderJob
       :image => cachebust_url( uploader.url(:small) ),
       :image_large => cachebust_url( uploader.url )
     }
-    
-    response = @connection['locations'].update_one({ :_id => BSON::ObjectId.from_string(id) }, { "$set" => update_params })
+
+    response = @bjjmapper.update_location(id, update_params)
     STDERR.puts response.inspect
   end
 
