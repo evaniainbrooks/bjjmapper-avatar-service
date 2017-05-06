@@ -1,8 +1,8 @@
 GIT
   remote: git@bitbucket.org:rollfindr/bjjmapper_api_client.git
-  revision: ffd58ab0cedbfd9d88f050df8db542ee363844cf
+  revision: 072033ade0df1833b83540ba0c3cf6e06cf08be1
   specs:
-    bjjmapper_api_client (0.0.2)
+    bjjmapper_api_client (0.0.5)
 
 GEM
   remote: https://rubygems.org/
@@ -194,7 +194,7 @@ PLATFORMS
 
 DEPENDENCIES
   andand
-  bjjmapper_api_client (~> 0.0.2)!
+  bjjmapper_api_client (~> 0.0.5)!
   capistrano (~> 3.2.1)
   capistrano-bundler
   carrierwave

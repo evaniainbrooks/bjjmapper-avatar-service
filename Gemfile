@@ -10,7 +10,7 @@ gem 'carrierwave'
 gem 'fog'
 gem 'dotenv'
 gem 'thin'
-gem 'bjjmapper_api_client', '~> 0.0.2', :git => 'git@bitbucket.org:rollfindr/bjjmapper_api_client.git'
+gem 'bjjmapper_api_client', '~> 0.0.5', :git => 'git@bitbucket.org:rollfindr/bjjmapper_api_client.git'
 
 group :test, :development do
   gem 'capistrano', '~> 3.2.1'
