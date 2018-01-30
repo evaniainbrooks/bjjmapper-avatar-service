@@ -17,6 +17,9 @@ module UserImageUploaderJob
       uploader.store!(file)
 
       self.update_model(id, uploader)
+    rescue StandardError => e
+      puts "UserImageUploader failed #{e.backtrace}"
+      raise e
     ensure
       File.delete(path)
     end

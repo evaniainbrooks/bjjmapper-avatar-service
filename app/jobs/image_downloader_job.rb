@@ -6,7 +6,7 @@ module ImageDownloaderJob
   @queue = "images"
 
   def self.save_to_tempfile(url)
-    STDERR.puts "Downloading #{url}"	
+    STDERR.puts "Downloading #{url}"
 
 		uri = URI.parse(url)
     resp = Net::HTTP.get_response(uri)
@@ -22,5 +22,8 @@ module ImageDownloaderJob
     STDERR.puts "Saved #{url} to #{file.path}"
 
     Resque.enqueue(upload_job_class.constantize, id, file.path)
+  rescue StandardError => e
+    puts "ImageDownloaderJob failed #{e.backtrace}"
+    raise e
   end
 end

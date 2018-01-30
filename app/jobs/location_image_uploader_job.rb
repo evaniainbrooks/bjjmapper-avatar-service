@@ -14,6 +14,9 @@ module LocationImageUploaderJob
       uploader.store!(file)
 
       self.update_model(id, uploader)
+    rescue StandardError => e
+      puts "LocationImageUploader failed #{e.backtrace}"
+      raise e
     ensure
       File.delete(path)
     end

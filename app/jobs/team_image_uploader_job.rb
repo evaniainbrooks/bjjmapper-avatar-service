@@ -17,7 +17,9 @@ module TeamImageUploaderJob
       uploader.store!(file)
 
       self.update_model(id, uploader)
-
+    rescue StandardError => e
+      puts "TeamImageUploader failed #{e.backtrace}"
+      raise e
     ensure
       File.delete(path)
     end

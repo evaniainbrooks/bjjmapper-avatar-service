@@ -49,7 +49,7 @@ module AvatarService
 
       status 202
     end
-    
+
     post '/upload/locations/:location_id/async' do
       content_type :json
 
