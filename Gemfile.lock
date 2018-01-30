@@ -209,3 +209,9 @@ DEPENDENCIES
   sinatra
   thin
   unicorn
+
+RUBY VERSION
+   ruby 2.3.6p384
+
+BUNDLED WITH
+   1.16.1
