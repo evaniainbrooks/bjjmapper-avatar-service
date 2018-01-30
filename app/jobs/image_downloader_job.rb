@@ -10,7 +10,7 @@ module ImageDownloaderJob
 
 		uri = URI.parse(url)
     resp = Net::HTTP.get_response(uri)
-    file = Tempfile.new('avatarsvc', Dir.tmpdir, 'wb+')
+    file = Tempfile.new('avatarsvc', Dir.tmpdir)
     file.binmode
     file.write(resp.body)
     file.flush
